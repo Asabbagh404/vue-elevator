@@ -22,6 +22,13 @@
         components: {
             Stage
         },
+        mounted: function () {
+            this.$nextTick(function () {
+                window.setInterval(() => {
+                    this.elevatorMove();
+                },700);
+            })
+        },
         computed: {
             ...mapState('elevator', {
                 currentStage: state => state.currentStage,
@@ -31,9 +38,15 @@
                 stages: state => state.stages
             })
         },
+        methods : {
+            elevatorMove: function(){
+                this.$store.dispatch("elevator/elevatorMove")
+            }
+        },
         data() {
             return {}
         }
+
     }
 </script>
 <style lang="scss">
