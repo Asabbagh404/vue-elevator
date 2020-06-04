@@ -29,3 +29,7 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+    /* Ajout de tous les CSS */
+    @import "./assets/styles/init.scss";
+</style>
