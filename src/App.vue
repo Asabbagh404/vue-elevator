@@ -1,9 +1,8 @@
 <template>
     <div id="app">
         {{ waitingList }}
-        <div class="container" v-for="stage in stages" :key="stage.value">
-            <div class="row border-top pt-3 pb-3">
-                <div class="col-6"><span v-if="stage.value === currentStage">X</span></div>
+        <div class="container">
+            <div class="row border-top pt-3 pb-3" v-for="floor in ReversedFloors" :key="floor.key">
                 <div class="col-6">
                     <Elevator v-if="floor.key === currentFloor"></Elevator>
                 </div>
@@ -35,6 +34,8 @@
 
         },
         computed: {
+            // VUEX
+            //Elevator
             ...mapState('elevator', {
                 currentFloor: state => state.currentFloor,
                 waitingList: state => state.waitingList
@@ -58,6 +59,5 @@
     }
 </script>
 <style lang="scss">
-    /* Ajout de tous les CSS */
     @import "./assets/styles/init.scss";
 </style>
