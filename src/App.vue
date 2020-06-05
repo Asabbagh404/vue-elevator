@@ -28,11 +28,11 @@
             Elevator
         },
         mounted: function () {
-            this.$nextTick(function () {
-                window.setInterval(() => {
-                    this.elevatorMove();
-                },700);
-            })
+
+            window.setInterval(() => {
+                this.elevatorMove();
+            }, settings.elevatorSpeed);
+
         },
         computed: {
             ...mapState('elevator', {
