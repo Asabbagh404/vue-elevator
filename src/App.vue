@@ -5,7 +5,10 @@
             <div class="row border-top pt-3 pb-3">
                 <div class="col-6"><span v-if="stage.value === currentStage">X</span></div>
                 <div class="col-6">
-                    <Stage :nbr="stage.name"></Stage>
+                    <Elevator v-if="floor.key === currentFloor"></Elevator>
+                </div>
+                <div class="col-6">
+                    <Floor :current-floor="floor">{{ floor.name }}</Floor>
                 </div>
             </div>
         </div>
@@ -13,14 +16,16 @@
 </template>
 
 <script>
-    import Stage from './components/Stage'
-    import {mapState} from 'vuex'
-
+    import Floor from './components/Floor'
+    import Elevator from './components/Elevator'
+    import {mapState, mapGetters, mapActions} from 'vuex'
+    import {settings} from './config/settings'
 
     export default {
         name: 'App',
         components: {
-            Stage
+            Floor,
+            Elevator
         },
         mounted: function () {
             this.$nextTick(function () {
@@ -31,12 +36,15 @@
         },
         computed: {
             ...mapState('elevator', {
-                currentStage: state => state.currentStage,
-                waitingList : state =>state.waitingList
+                currentFloor: state => state.currentFloor,
+                waitingList: state => state.waitingList
             }),
-            ...mapState('stages', {
-                stages: state => state.stages
-            })
+
+            //Floors
+            ...mapGetters('floors', {
+                ReversedFloors: 'getReversedFloors'
+            }),
+
         },
         methods : {
             elevatorMove: function(){
