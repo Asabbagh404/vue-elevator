@@ -47,14 +47,14 @@
             }),
 
         },
-        methods : {
-            elevatorMove: function(){
-                this.$store.dispatch("elevator/elevatorMove")
-            }
+        methods: {
+            ...mapActions('elevator', {
+                elevatorMove: 'elevatorMove'
+            }),
         },
         data() {
             return {}
-        }
+        },
 
     }
 </script>
