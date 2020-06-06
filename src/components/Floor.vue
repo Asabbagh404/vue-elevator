@@ -3,7 +3,7 @@
         Etage
         <slot></slot>
         <div class="btn-list row justify-content-center mt-2">
-            <button @click="addDestination(currentFloor.key)" v-for="floor in floors" :key="floor.key"
+            <button @click="setPath({from : currentFloor.key, to: floor.key, pathDirection : currentFloor.key - floor.key > 0 ? 'down' : 'up' })" v-for="floor in floors" :key="floor.key"
                     class="btn btn-info mr-1 btn-elevator"
                     v-show="floor.name !== currentFloor.name">
                 {{ floor.name }}
@@ -30,13 +30,12 @@
             }),
             ...mapState('elevator', {
                 waitingList: state => state.waitingList,
+                pickupList : state => state.pickupList
             })
         },
         methods: {
-
-            addDestination: function (currentFloor) {
-                this.$store.dispatch("elevator/addDestination", currentFloor);
-
+            setPath: function (currentFloor) {
+                this.$store.dispatch("elevator/addPickupPoint", currentFloor);
             }
         }
     }
