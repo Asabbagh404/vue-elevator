@@ -9,6 +9,9 @@
                 {{ floor.name }}
             </button>
         </div>
+        <div v-for="person in this.pickupList" :key="person.from" class="d-flex listPickup">
+            <img v-if="person.from === currentFloor.key" src="../assets/images/user.svg" class="person" alt="Jean" >
+        </div>
     </div>
 
 </template>
@@ -38,3 +41,13 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+        .listPickup {
+            margin-top: 20px;
+            .person {
+                width: 20px;
+                height: 20px;
+            }
+        }
+</style>
