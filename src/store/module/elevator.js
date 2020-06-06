@@ -1,47 +1,116 @@
 const state = {
-    currentFloor: 1,
-    waitingList: [],
-    destination: 0,
-    mode: "close",
-    direction: "up",
+    currentFloor: {
+        key: 0, name: 0
+    },
+    doors: "close",
+    direction: "",
+
+    pickupList: [],
+    dropoutList: [],
 };
 
-const getters = {
-}
+const getters = {};
 
 const actions = {
-    addDestination(context, dest) {
-        context.commit('addDestination', dest)
+    checkUpperFloor(context) {
+        context.commit('toggleDirection')
+    },
+
+    addPickupPoint(context, data) {
+        context.commit('addPickupPoint', data)
+    },
+    addDropoutPoint(context, dest) {
+        context.commit('addDropoutPoint', dest)
+    },
+    checkAction(context) {
+        let sameFloorToPickup = state.pickupList.find(floor => floor.from === state.currentFloor.key);
+        let sameFloorToDropout = state.dropoutList.find(floor => floor === state.currentFloor.key);
+
+        if (sameFloorToPickup) {
+            context.commit("setDoors", 'open');
+            context.commit('addDropoutPoint', sameFloorToPickup.to);
+            context.commit('pickup', sameFloorToPickup)
+        }
+
+        if (sameFloorToDropout) {
+            context.commit("setDoors", 'open');
+            context.commit("dropout", sameFloorToDropout);
+        }
+    },
+
+    checkEndDirection(context) {
+        if (state.dropoutList.filter(path => path >= state.currentFloor.key).length > 0) {
+            context.commit('setDirection', 'up')
+        } else if (state.dropoutList.filter(path => path <= state.currentFloor.key).length > 0) {
+            context.commit('setDirection', 'down')
+        } else if (state.pickupList.filter(path => path.from >= state.currentFloor.key).length > 0) {
+            context.commit('setDirection', 'up')
+        } else if (state.pickupList.filter(path => path.from <= state.currentFloor.key).length > 0) {
+            context.commit('setDirection', 'down')
+        } else if (state.pickupList.length === 0 && state.dropoutList.length === 0) {
+            if (state.currentFloor.key > 0) {
+                context.commit('setDirection', 'down')
+            } else if (state.currentFloor.key < 0) {
+                context.commit('setDirection', 'up')
+            } else {
+                context.commit('setDirection', '')
+            }
+        }
     },
     elevatorMove(context) {
-        context.commit("setMode", 'close');
-        if (state.waitingList.length !== 0) {
-            if (state.waitingList[0] > state.currentFloor) {
-                context.commit('elevatorMove', +1)
-            } else if (state.waitingList[0] < state.currentFloor) {
-                context.commit('elevatorMove', -1)
-            } else {
-                context.commit("setMode", 'open');
-                context.commit('removeToTheList')
+        if (state.direction === "") {
+            if (state.pickupList.length > 0) {
+                if (state.currentFloor.key > state.pickupList[0].from) {
+                    context.commit('setDirection', 'down')
+                } else if (state.currentFloor.key < state.pickupList[0].from) {
+                    context.commit('setDirection', 'up')
+                }
+            }
+        } else {
+            context.commit("setDoors", 'close');
+            context.dispatch('checkEndDirection');
+
+           console.log(state.currentFloor.key)
+            if(state.pickupList.find(floor => floor.from === state.currentFloor.key) || state.dropoutList.find(floor => floor === state.currentFloor.key)){
+                context.dispatch('checkAction');
+            }
+            else if (state.direction === 'up') {
+                context.commit('moveUp');
+            } else if (state.direction === 'down') {
+                context.commit('moveDown');
             }
         }
     }
 };
 
 const mutations = {
-    addDestination(state, dest) {
-        state.waitingList.push(dest)
+    addDropoutPoint(state, dest) {
+        state.dropoutList.push(dest)
+    },
+    addPickupPoint(state, data) {
+        state.pickupList.push(data)
     },
 
-    elevatorMove(state, direction) {
-        state.currentFloor  += direction
+    dropout(state, floor) {
+        state.dropoutList.splice(state.dropoutList.indexOf(floor), 1);
     },
-    removeToTheList(state) {
-        state.waitingList.shift()
+    pickup(state, floor) {
+        state.pickupList.splice(state.pickupList.indexOf(floor), 1);
     },
 
-    setMode(state, mode){
-        state.mode = mode;
+    setDirection(state, dir) {
+        state.direction = dir;
+    },
+
+    moveUp() {
+        state.currentFloor.key++
+    },
+    moveDown() {
+        state.currentFloor.key--
+    },
+
+    setDoors(state, position) {
+        state.doors = position;
     }
 }
 
