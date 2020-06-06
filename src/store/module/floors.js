@@ -1,10 +1,10 @@
 const state = {
     floors: [
-        {key : 0, name : -1, pending: []},
-        {key : 1, name : 0, pending: []},
-        {key : 2, name : 1, pending: []},
-        {key : 3, name : 2, pending: []},
-        {key : 4, name : 3, pending: []},
+        {key : -1, name : -1},
+        {key : 0, name : 0},
+        {key : 1, name : 1},
+        {key : 2, name : 2},
+        {key : 3, name : 3},
     ],
 };
 
@@ -15,9 +15,7 @@ const getters = {
 }
 
 const actions = {
-    addPending(context, floorKey, val){
 
-    }
 };
 
 const mutations = {
