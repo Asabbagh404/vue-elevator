@@ -1,10 +1,14 @@
 <template>
     <div id="app">
-        {{ waitingList }}
+        <div>retrait  : {{ pickupList }}</div>
+        <div>dépot  : {{ dropoutList }}</div>
+        <div>etage actuel  : {{ currentFloor }}</div>
+        <div>direction : {{ direction }} </div>
+        <br>
         <div class="container">
             <div class="row border-top pt-3 pb-3" v-for="floor in ReversedFloors" :key="floor.key">
                 <div class="col-6">
-                    <Elevator v-if="floor.key === currentFloor"></Elevator>
+                    <Elevator v-if="floor.key === currentFloor.key"></Elevator>
                 </div>
                 <div class="col-6">
                     <Floor :current-floor="floor">{{ floor.name }}</Floor>
@@ -38,7 +42,10 @@
             //Elevator
             ...mapState('elevator', {
                 currentFloor: state => state.currentFloor,
-                waitingList: state => state.waitingList
+                pickupList: state => state.pickupList,
+                dropoutList: state => state.dropoutList,
+                direction : state => state.direction
+
             }),
 
             //Floors
