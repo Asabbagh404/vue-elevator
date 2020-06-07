@@ -27,10 +27,9 @@ npm run lint
 
 ##Packages
 ```
-    "bootstrap": "^4.5.0",
-    "core-js": "^3.6.5",
-    "jquery": "^3.5.1",
-    "popper.js": "^1.16.1",
-    "vue": "^2.6.11",
-    "vuex": "^3.4.0"
+    bootstrap
+    vuecli
+        babel
+        eslint
+    vuex
 ```
