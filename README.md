@@ -25,7 +25,7 @@ npm run build
 npm run lint
 ```
 
-##Package
+##Packages
 ```
     "bootstrap": "^4.5.0",
     "core-js": "^3.6.5",
