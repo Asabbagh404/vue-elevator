@@ -10,7 +10,7 @@ Néanmoins, on déposera / récupérera les personnes sur notre chemin.
 npm install
 ```
 
-### Compilation pour les développement
+### Compilation pour le développement
 ```
 npm run serve
 ```
