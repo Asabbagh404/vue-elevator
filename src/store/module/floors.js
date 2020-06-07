@@ -9,6 +9,7 @@ const state = {
 };
 
 const getters = {
+    // Renvoie la liste des étage en inversé de maniere à avoir un affichage cohérent
     getReversedFloors : state => {
         return state.floors.slice().reverse()
     }
