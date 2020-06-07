@@ -1,12 +1,11 @@
 <template>
     <div class="text-center">
-        Etage
         <slot></slot>
         <div class="btn-list row justify-content-center mt-2">
             <button @click="setPath({from : currentFloor.key, to: floor.key, pathDirection : currentFloor.key - floor.key > 0 ? 'down' : 'up' })" v-for="floor in floors" :key="floor.key"
                     class="btn btn-info mr-1 btn-elevator"
-                    v-show="floor.name !== currentFloor.name">
-                {{ floor.name }}
+                    v-show="floor.key !== currentFloor.key">
+                {{ floor.key }}
             </button>
         </div>
         <div v-for="person in this.pickupList" :key="person.from" class="d-flex listPickup">

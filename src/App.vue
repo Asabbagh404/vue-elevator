@@ -4,14 +4,16 @@
         <div>dépot  : {{ dropoutList }}</div>
         <div>etage actuel  : {{ currentFloor }}</div>
         <div>direction : {{ direction }} </div>
-        <br>
         <div class="container">
+            <AppConfig
+                :floors="floors"
+            />
             <div class="row border-top pt-3 pb-3" v-for="floor in ReversedFloors" :key="floor.key">
                 <div class="col-6">
-                    <Elevator v-if="floor.key === currentFloor.key"></Elevator>
+                    <AppElevator v-if="floor.key === currentFloor.key"></AppElevator>
                 </div>
                 <div class="col-6">
-                    <Floor :current-floor="floor">{{ floor.name }}</Floor>
+                    <AppFloor :current-floor="floor">{{ floor.name }}</Appfloor>
                 </div>
             </div>
         </div>
@@ -19,16 +21,18 @@
 </template>
 
 <script>
-    import Floor from './components/Floor'
-    import Elevator from './components/Elevator'
+    import AppFloor from './components/AppFloor'
+    import AppElevator from './components/AppElevator'
+    import AppConfig from './components/AppConfig'
     import {mapState, mapGetters, mapActions} from 'vuex'
     import {settings} from './config/settings'
 
     export default {
         name: 'App',
         components: {
-            Floor,
-            Elevator
+            AppFloor,
+            AppElevator,
+            AppConfig
         },
         mounted: function () {
 
@@ -51,6 +55,9 @@
             //Floors
             ...mapGetters('floors', {
                 ReversedFloors: 'getReversedFloors'
+            }),
+            ...mapState('floors', {
+                floors: state => state.floors
             }),
 
         },
