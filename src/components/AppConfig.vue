@@ -16,7 +16,10 @@
     export default {
         name: 'App',
         props: {
-            floors: Array
+            floors: {
+                type : Array,
+                required : true,
+            }
         },
         methods: {
             addFloor: function () {

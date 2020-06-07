@@ -25,7 +25,7 @@ npm run build
 npm run lint
 ```
 
-##Packages
+## Packages
 ```
     bootstrap
     vuecli
