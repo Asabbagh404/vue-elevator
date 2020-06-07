@@ -39,7 +39,13 @@ const actions = {
     },
 
     checkEndDirection(context) {
-        if (state.dropoutList.filter(path => path >= state.currentFloor.key).length > 0) {
+        let stillDropoutUp = state.dropoutList.filter(path => path > state.currentFloor.key).length > 0;
+        let stillPickupUp = state.pickupList.filter(path => path.from > state.currentFloor.key).length > 0;
+
+        let stillDropoutDown = state.dropoutList.filter(path => path < state.currentFloor.key).length > 0;
+        let stillPickupDown = state.pickupList.filter(path => path.from < state.currentFloor.key).length > 0;
+
+        if (stillDropoutUp) {
             context.commit('setDirection', 'up')
         } else if (state.dropoutList.filter(path => path <= state.currentFloor.key).length > 0) {
             context.commit('setDirection', 'down')
