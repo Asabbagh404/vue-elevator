@@ -12,16 +12,16 @@ const state = {
 const getters = {};
 
 const actions = {
-    checkUpperFloor(context) {
-        context.commit('toggleDirection')
-    },
-
+    // addPickupPoint : Ajout d'un point de retrait
     addPickupPoint(context, data) {
         context.commit('addPickupPoint', data)
     },
+    // addDropoutPoint : Ajout d'un point de dépot
     addDropoutPoint(context, dest) {
         context.commit('addDropoutPoint', dest)
     },
+
+    // checkAction : Verifie si une action ( depot ou retrait ) est à faire dans l'étage courant
     checkAction(context) {
         let sameFloorToPickup = state.pickupList.find(floor => floor.from === state.currentFloor.key);
         let sameFloorToDropout = state.dropoutList.find(floor => floor === state.currentFloor.key);
@@ -29,15 +29,16 @@ const actions = {
         if (sameFloorToPickup !== undefined) {
             context.commit("setDoors", 'open');
             context.commit('addDropoutPoint', sameFloorToPickup.to);
-            context.commit('pickup', sameFloorToPickup)
+            context.commit('removePickupPoint', sameFloorToPickup)
         }
 
         if (sameFloorToDropout !== undefined) {
             context.commit("setDoors", 'open');
-            context.commit("dropout", sameFloorToDropout);
+            context.commit("removeDropoutPoint", sameFloorToDropout);
         }
     },
 
+    // checkEndDirection : verifie si il reste des personnes à récupérer en haut / en bas et adapte sa direction en fonction
     checkEndDirection(context) {
         let stillDropoutUp = state.dropoutList.filter(path => path > state.currentFloor.key).length > 0;
         let stillPickupUp = state.pickupList.filter(path => path.from > state.currentFloor.key).length > 0;
@@ -63,6 +64,10 @@ const actions = {
             }
         }
     },
+
+    // elevatorMove : Se lance tout les X secondes et détermine l'ordre de lancement des fonctions et le mouvement
+    // en haut ou en bas
+
     elevatorMove(context) {
         if (state.direction === "") {
             if (state.pickupList.length > 0) {
@@ -73,7 +78,6 @@ const actions = {
                 }
             }
         }
-
         context.commit("setDoors", 'close');
         context.dispatch('checkEndDirection');
 
@@ -96,10 +100,10 @@ const mutations = {
         state.pickupList.push(data)
     },
 
-    dropout(state, floor) {
+    removeDropoutPoint(state, floor) {
         state.dropoutList.splice(state.dropoutList.indexOf(floor), 1);
     },
-    pickup(state, floor) {
+    removePickupPoint(state, floor) {
         state.pickupList.splice(state.pickupList.indexOf(floor), 1);
     },
 

@@ -1,9 +1,12 @@
 <template>
     <div id="app">
+        <!--Debugage-->
         <div>retrait  : {{ pickupList }}</div>
         <div>dépot  : {{ dropoutList }}</div>
         <div>etage actuel  : {{ currentFloor }}</div>
         <div>direction : {{ direction }} </div>
+        <!--FIN : Debugage-->
+
         <div class="container">
             <AppConfig
                 :floors="floors"
@@ -35,7 +38,7 @@
             AppConfig
         },
         mounted: function () {
-
+            // Lancement de la fonction de déplacement de l'ascenseur tout les X secondes
             window.setInterval(() => {
                 this.elevatorMove();
             }, settings.elevatorSpeed);
@@ -65,9 +68,6 @@
             ...mapActions('elevator', {
                 elevatorMove: 'elevatorMove'
             }),
-        },
-        data() {
-            return {}
         },
 
     }

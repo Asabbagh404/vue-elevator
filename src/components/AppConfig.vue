@@ -1,7 +1,7 @@
 <template>
+<!--    Système de configuration : Ajout et suppression d'étage-->
     <div class="config pb-3 pt-3">
         <h4>Configuration</h4>
-
         <p class="mt-4 ">Nombre d'étages</p>
         <div class="d-flex justify-content-center">
             <button class="btn btn-success" @click="removeFloor">-</button>
@@ -10,20 +10,25 @@
         </div>
 
     </div>
+    <!--    FIN : Système de configuration-->
 </template>
 <script>
+    import {mapActions} from 'vuex'
+
     export default {
         name: 'App',
         props: {
             floors: Array
         },
         methods: {
-            addFloor: function () {
-                this.$store.dispatch("floors/addFloor");
-            },
-            removeFloor: function () {
-                this.$store.dispatch("floors/removeFloor");
-            }
+            // Methode ajout et suppression des étages
+            ...mapActions('floors', {
+                removeFloor: 'addFloor'
+            }),
+            ...mapActions('floors', {
+                removeFloor: 'removeFloor'
+            }),
+            // Fin - Methode ajout et suppression des étages
         }
     }
 </script>
