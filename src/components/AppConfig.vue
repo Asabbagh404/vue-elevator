@@ -13,22 +13,18 @@
     <!--    FIN : Système de configuration-->
 </template>
 <script>
-    import {mapActions} from 'vuex'
-
     export default {
         name: 'App',
         props: {
             floors: Array
         },
         methods: {
-            // Methode ajout et suppression des étages
-            ...mapActions('floors', {
-                removeFloor: 'addFloor'
-            }),
-            ...mapActions('floors', {
-                removeFloor: 'removeFloor'
-            }),
-            // Fin - Methode ajout et suppression des étages
+            addFloor: function () {
+                this.$store.dispatch("floors/addFloor");
+            },
+            removeFloor: function () {
+                this.$store.dispatch("floors/removeFloor");
+            }
         }
     }
 </script>
