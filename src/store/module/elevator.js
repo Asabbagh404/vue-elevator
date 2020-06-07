@@ -26,13 +26,13 @@ const actions = {
         let sameFloorToPickup = state.pickupList.find(floor => floor.from === state.currentFloor.key);
         let sameFloorToDropout = state.dropoutList.find(floor => floor === state.currentFloor.key);
 
-        if (sameFloorToPickup) {
+        if (sameFloorToPickup !== undefined) {
             context.commit("setDoors", 'open');
             context.commit('addDropoutPoint', sameFloorToPickup.to);
             context.commit('pickup', sameFloorToPickup)
         }
 
-        if (sameFloorToDropout) {
+        if (sameFloorToDropout !== undefined) {
             context.commit("setDoors", 'open');
             context.commit("dropout", sameFloorToDropout);
         }
@@ -47,12 +47,12 @@ const actions = {
 
         if (stillDropoutUp) {
             context.commit('setDirection', 'up')
-        } else if (state.dropoutList.filter(path => path <= state.currentFloor.key).length > 0) {
+        } else if (stillDropoutDown) {
             context.commit('setDirection', 'down')
-        } else if (state.pickupList.filter(path => path.from >= state.currentFloor.key).length > 0) {
+        } else if (stillPickupDown) {
+            context.commit('setDirection', 'down')
+        } else if (stillPickupUp) {
             context.commit('setDirection', 'up')
-        } else if (state.pickupList.filter(path => path.from <= state.currentFloor.key).length > 0) {
-            context.commit('setDirection', 'down')
         } else if (state.pickupList.length === 0 && state.dropoutList.length === 0) {
             if (state.currentFloor.key > 0) {
                 context.commit('setDirection', 'down')
@@ -72,20 +72,19 @@ const actions = {
                     context.commit('setDirection', 'up')
                 }
             }
-        } else {
-            context.commit("setDoors", 'close');
-            context.dispatch('checkEndDirection');
-
-           console.log(state.currentFloor.key)
-            if(state.pickupList.find(floor => floor.from === state.currentFloor.key) || state.dropoutList.find(floor => floor === state.currentFloor.key)){
-                context.dispatch('checkAction');
-            }
-            else if (state.direction === 'up') {
-                context.commit('moveUp');
-            } else if (state.direction === 'down') {
-                context.commit('moveDown');
-            }
         }
+
+        context.commit("setDoors", 'close');
+        context.dispatch('checkEndDirection');
+
+        if (state.pickupList.filter(floor => floor.from === state.currentFloor.key).length > 0 || state.dropoutList.filter(floor => floor === state.currentFloor.key).length > 0) {
+            context.dispatch('checkAction');
+        } else if (state.direction === 'up') {
+            context.commit('moveUp');
+        } else if (state.direction === 'down') {
+            context.commit('moveDown');
+        }
+
     }
 };
 
