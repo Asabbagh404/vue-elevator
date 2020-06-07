@@ -2,8 +2,8 @@
     <!--Affichage de l'ascenseur-->
     <div class="elevator">
         <img :src="require('../assets/images/elevators/elevator_' + this.doors + '.svg')" alt="">
-        <div v-for="person in this.dropoutList" :key="person" class="d-flex listDropout">
-            <img src="../assets/images/user.svg" class="person" alt="Jean">
+        <div class="d-flex listDropout">
+            <img src="../assets/images/user.svg" class="person" alt="Jean" v-for="person in this.dropoutList" :key="person">
         </div>
     </div>
     <!--FIN : Affichage de l'ascenseur-->

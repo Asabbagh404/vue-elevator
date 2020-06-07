@@ -11,8 +11,10 @@
             <!--FIN - Generation boutons d'étages-->
         </div>
         <!--Generation des icons personnes-->
-       <div v-for="person in this.pickupList" :key="person.from" class="d-flex listPickup">
-           <img v-if="person.from === currentFloor.key" src="../assets/images/user.svg" class="person" alt="Jean" >
+       <div class="d-flex listPickup">
+           <span v-for="person in this.pickupList" :key="person.from">
+               <img v-if="person.from === currentFloor.key" src="../assets/images/user.svg" class="person" alt="Jean" >
+           </span>
        </div>
         <!--FIN : Generation des icons personnes-->
    </div>
@@ -33,7 +35,6 @@
                floors: state => state.floors
            }),
            ...mapState('elevator', {
-               waitingList: state => state.waitingList,
                pickupList : state => state.pickupList
            })
        },
