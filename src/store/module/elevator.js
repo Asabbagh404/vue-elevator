@@ -59,13 +59,18 @@ const actions = {
         }
 
         if (state.pickupList.length === 0 && state.dropoutList.length === 0) {
-            if (state.currentFloor.key > 0) {
-                context.commit('setDirection', 'down')
-            } else if (state.currentFloor.key < 0) {
-                context.commit('setDirection', 'up')
-            } else {
-                context.commit('setDirection', '')
-            }
+            context.dispatch('resetElevator');
+        }
+    },
+    
+    // Fct. d'envoie vers rez de chaussée, se lance lorsque plus aucune tâche n'est à faire
+    resetElevator(context) {
+        if (state.currentFloor.key > 0) {
+            context.commit('setDirection', 'down')
+        } else if (state.currentFloor.key < 0) {
+            context.commit('setDirection', 'up')
+        } else {
+            context.commit('setDirection', '')
         }
     },
 
