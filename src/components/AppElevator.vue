@@ -2,18 +2,19 @@
     <!--Affichage de l'ascenseur-->
     <div class="elevator">
         <img :src="require('../assets/images/elevators/elevator_' + this.doors + '.svg')" alt="">
-        <div class="d-flex listDropout">
-            <img src="../assets/images/user.svg" class="person" alt="Jean" v-for="person in this.dropoutList" :key="person">
-        </div>
+        <AppUsers :persons="this.dropoutList"></AppUsers>
     </div>
     <!--FIN : Affichage de l'ascenseur-->
 </template>
 <script>
-
     import {mapState} from 'vuex'
+    import AppUsers from './AppUsers'
 
     export default {
         name: 'Elevator',
+        components : {
+          AppUsers
+        },
         computed: {
             // VUEX
             //Elevator
@@ -30,7 +31,6 @@
             width: 150px;
             height: 150px;
         }
-
         .listDropout {
             margin-top: 20px;
 
