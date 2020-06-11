@@ -27,7 +27,7 @@ const actions = {
 const mutations = {
     // clef = La clef du dernier element du tableau floor +1, name = 'Etage ' + (clef + 1)
     addFloor(state){
-        state.floors.push({key: state.floors[state.floors.length - 1].key + 1, name:'Etage ' +  (parseInt(state.floors[state.floors.length - 1].key)+1).toString()})
+        state.floors.push({key: state.floors[state.floors.length - 1].key + 1, name:'Etage ' +  (parseInt(state.floors[state.floors.length - 1].key)+1)})
     },
     removeFloor(state){
         state.floors.pop()

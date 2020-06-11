@@ -42,7 +42,6 @@
             window.setInterval(() => {
                 this.elevatorMove();
             }, settings.elevatorSpeed);
-
         },
         computed: {
             // VUEX

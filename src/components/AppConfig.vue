@@ -1,5 +1,5 @@
 <template>
-<!--    Système de configuration : Ajout et suppression d'étage-->
+    <!--Système de configuration : Ajout et suppression d'étage-->
     <div class="config pb-3 pt-3">
         <h4>Configuration</h4>
         <p class="mt-4 ">Nombre d'étages</p>
@@ -8,13 +8,12 @@
             <div class="config-text ml-2 mr-2">{{ floors.length }}</div>
             <button class="btn btn-success" @click="addFloor">+</button>
         </div>
-
     </div>
-    <!--    FIN : Système de configuration-->
+    <!--FIN : Système de configuration-->
 </template>
 <script>
     export default {
-        name: 'App',
+        name: 'Configuration',
         props: {
             floors: {
                 type : Array,
