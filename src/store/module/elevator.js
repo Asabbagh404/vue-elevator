@@ -2,6 +2,7 @@ const state = {
     currentFloor: {
         key: 0, name: 0
     },
+
     doors: "close",
     direction: "",
 
@@ -22,24 +23,24 @@ const actions = {
     },
 
     // checkAction : Verifie si une action ( depot ou retrait ) est à faire dans l'étage courant
-    checkAction(context) {
+     checkAction(context) {
         let sameFloorToPickup = state.pickupList.find(floor => floor.from === state.currentFloor.key);
         let sameFloorToDropout = state.dropoutList.find(floor => floor === state.currentFloor.key);
 
+        context.commit("setDoors", 'open');
+
         if (sameFloorToPickup !== undefined) {
-            context.commit("setDoors", 'open');
-            context.commit('addDropoutPoint', sameFloorToPickup.to);
-            context.commit('removePickupPoint', sameFloorToPickup)
+             context.commit('addDropoutPoint', sameFloorToPickup.to);
+             context.commit('removePickupPoint', sameFloorToPickup)
         }
 
         if (sameFloorToDropout !== undefined) {
-            context.commit("setDoors", 'open');
             context.commit("removeDropoutPoint", sameFloorToDropout);
         }
     },
 
     // checkEndDirection : verifie si il reste des personnes à récupérer en haut / en bas et adapte sa direction en fonction
-    checkEndDirection(context) {
+    async checkEndDirection(context) {
         let stillDropoutUp = state.dropoutList.filter(path => path > state.currentFloor.key).length > 0;
         let stillPickupUp = state.pickupList.filter(path => path.from > state.currentFloor.key).length > 0;
 
@@ -59,12 +60,12 @@ const actions = {
         }
 
         if (state.pickupList.length === 0 && state.dropoutList.length === 0) {
-            context.dispatch('resetElevator');
+            await context.dispatch('reset');
         }
     },
-    
+
     // Fct. d'envoie vers rez de chaussée, se lance lorsque plus aucune tâche n'est à faire
-    resetElevator(context) {
+    reset(context) {
         if (state.currentFloor.key > 0) {
             context.commit('setDirection', 'down')
         } else if (state.currentFloor.key < 0) {
@@ -77,7 +78,7 @@ const actions = {
     // elevatorMove : Se lance tout les X secondes et détermine l'ordre de lancement des fonctions et le mouvement
     // en haut ou en bas
 
-    elevatorMove(context) {
+   async elevatorMove(context) {
         if (state.direction === "") {
             if (state.pickupList.length > 0) {
                 if (state.currentFloor.key > state.pickupList[0].from) {
@@ -88,16 +89,18 @@ const actions = {
             }
         }
         context.commit("setDoors", 'close');
-        context.dispatch('checkEndDirection');
-
         if (state.pickupList.filter(floor => floor.from === state.currentFloor.key).length > 0 || state.dropoutList.filter(floor => floor === state.currentFloor.key).length > 0) {
-            context.dispatch('checkAction');
+            await context.dispatch('checkAction');
+            await context.dispatch('checkEndDirection');
         } else if (state.direction === 'up') {
             context.commit('moveUp');
         } else if (state.direction === 'down') {
             context.commit('moveDown');
         }
-
+       if (state.pickupList.length === 0 && state.dropoutList.length === 0) {
+           await context.dispatch('reset');
+           await context.dispatch('checkEndDirection');
+       }
     }
 };
 
@@ -115,18 +118,15 @@ const mutations = {
     removePickupPoint(state, floor) {
         state.pickupList.splice(state.pickupList.indexOf(floor), 1);
     },
-
     setDirection(state, dir) {
         state.direction = dir;
     },
-
     moveUp() {
         state.currentFloor.key++
     },
     moveDown() {
         state.currentFloor.key--
     },
-
     setDoors(state, position) {
         state.doors = position;
     }
